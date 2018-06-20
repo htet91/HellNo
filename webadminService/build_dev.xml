@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================ -->
+<!--  webadminServiceEar make ear                               -->
+<!--                                                  -->
+<!-- ================================================ -->
+<project name="webadminServiceEar" default="dist">
+
+	<!-- - - - - - - - - - - - - - -->
+	<!--  target: init             -->
+	<!-- - - - - - - - - - - - - - -->
+	<target name="init">
+		<property name="web-app.name" value="webadminService" />
+		<property name="target" value="dev"/>
+		<property name="build.home" value="build"/>
+		<property name="war.home" value="war"/>
+	</target>
+
+	<!-- ========================= -->
+	<!--   target: copy            -->
+	<!-- ========================= -->
+	<target name="copy" depends="init" description="resource copy">
+		<copy todir="${war.home}/${target}" verbose="true" preservelastmodified="true">
+			<fileset dir="./WebContent" excludes="**/backup/" />
+		</copy>
+		<copy todir="${war.home}/${target}/WEB-INF/classes" verbose="true" preservelastmodified="true">
+			<fileset dir="${build.home}/classes">
+				<exclude name="**/jdbc.properties"/>
+				<exclude name="**/log4j.xml"/>
+				<exclude name="**/ldap.properties"/>
+			</fileset>
+		</copy>
+		<copy file="./resource/${target}/globalsign.properties" todir="${war.home}/${target}/WEB-INF/classes" overwrite="true" description="globalsign.properties copy" verbose="true" preservelastmodified="true"/>
+		<copy file="./resource/${target}/setting.properties" todir="${war.home}/${target}/WEB-INF/classes" overwrite="true" description="setting.properties copy" verbose="true" preservelastmodified="true"/>
+		<copy file="./resource/${target}/lib/globalsign.jar" todir="${war.home}/${target}/WEB-INF/lib" overwrite="true" description="globalsign.jar copy" verbose="true" preservelastmodified="true"/>
+		<copy file="./resource/${target}/log4j.xml" todir="${war.home}/${target}/WEB-INF/classes" overwrite="true" description="log4j.xml copy" verbose="true" preservelastmodified="true"/>
+		<copy file="./resource/${target}/jdbc.properties" todir="${war.home}/${target}/WEB-INF/classes" overwrite="true" description="jdbc.properties copy" verbose="true" preservelastmodified="true"/>
+		<copy file="./resource/${target}/ldap.properties" todir="${war.home}/${target}/WEB-INF/classes" overwrite="true" description="ldap.properties copy" verbose="true" preservelastmodified="true"/>
+	</target>
+
+	<!-- ========================= -->
+	<!--   target: makeEar         -->
+	<!-- ========================= -->
+	<target name="dist" depends="copy" description="create ear file">
+		<delete file="${war.home}/${target}/${web-app.name}.war"/>
+		<delete file="${war.home}/${target}/${web-app.name}EAR.ear"/>
+		<war destfile="${war.home}/${target}/${web-app.name}.war" webxml="${war.home}/${target}/WEB-INF/web.xml">
+			<fileset dir="${war.home}/${target}"/>
+			<!--<classes dir="${war.home}/${target}/WEB-INF/classes"/>-->
+		</war>
+		<ear destfile="${war.home}/${target}/${web-app.name}EAR.ear" appxml="application.xml">
+			<fileset dir="${war.home}/${target}" includes="*.war"/>
+		</ear>
+	</target>
+
+</project>

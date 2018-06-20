@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================ -->
+<!--  webadminService make jar                        -->
+<!--                                                  -->
+<!-- ================================================ -->
+<project name="webadminService" default="dist">
+
+	<!-- - - - - - - - - - - - - - -->
+	<!--  target: init             -->
+	<!-- - - - - - - - - - - - - - -->
+	<target name="init">
+		<property name="web-app.name" value="webadminService" />
+		<property name="build.home" value="build"/>
+		<property name="dest.dir" value="../webadmin/WebContent/WEB-INF/lib"/>
+	</target>
+
+	<!-- ========================= -->
+	<!--   target: makeJar         -->
+	<!-- ========================= -->
+	<target name="dist" depends="init" description="create jar file">
+		<jar basedir="${build.home}/classes/" destfile="${dest.dir}/${web-app.name}.jar" includes="com/webadminservice/dto/**,com/webadminservice/param/**,com/webadminservice/entity/**,com/webadminservice/constants/**,com/webadminservice/util/**,com/webadminservice/ws/globalsign/exception/**"/>
+	</target>
+
+</project>
